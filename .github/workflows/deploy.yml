@@ -25,13 +25,17 @@ jobs:
 
       - name: Deploy to Cloudflare Workers
         run: |
-          # Auto-update wrangler.toml with GitHub repo info
+          # Auto-detect GitHub repo info
           GITHUB_OWNER="${{ github.repository_owner }}"
           GITHUB_REPO=$(basename "${{ github.repository }}")
+          
+          # Update wrangler.toml with actual GitHub URLs
           sed -i "s|https://github.com/USERNAME/REPO|https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}|g" wrangler.toml
           sed -i "s|https://USERNAME.github.io/REPO|https://${GITHUB_OWNER}.github.io/${GITHUB_REPO}|g" wrangler.toml
           
-          wrangler deploy
+          # Deploy using only API token (no account ID needed)
+          echo "Deploying to Cloudflare Workers..."
+          wrangler deploy --var gh:"https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}" --var yxURL:"https://${GITHUB_OWNER}.github.io/${GITHUB_REPO}/ips.txt"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
@@ -52,6 +56,11 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
+      - name: Copy wizard files to public
+        run: |
+          cp -r wizard/* public/ || true
+          echo "Copied wizard files to public directory"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

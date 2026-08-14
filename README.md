@@ -1,130 +1,128 @@
-# ⚡ CF Edge Relay — Cloudflare Workers + GitHub Pages
+# ⚡ EDGE·FORGE — Cloudflare Worker & GitHub Pages
 
-## 📋 توضیحات
+پروژه‌ای کامل برای دپلوی خودکار ورکر کلودفلر و سایت استاتیک گیت‌هاب پیجز مستقیماً از گیت‌هاب.
 
-این پروژه به‌طور خودکار از گیت‌هاب به **Cloudflare Workers** و **GitHub Pages** دپلوی می‌شود. فقط کافیست API Token کلودفلر را وارد کنید تا همه چیز به‌صورت خودکار تنظیم و دپلوی شود.
+## 🚀 ویژگی‌ها
 
----
+- ✅ **دپلوی خودکار** به Cloudflare Workers با هر بار push
+- ✅ **دپلوی خودکار** به GitHub Pages با هر بار push
+- ✅ **فقط API Token** لازم است (بدون نیاز به Account ID)
+- ✅ **Wizard یکپارچه** برای مدیریت آسان دپلوی
+- ✅ **همگام‌سازی خودکار** فایل‌های ips.txt و proxy/
+- ✅ **پشتیبانی کامل** از VLESS, Trojan, xhttp, ECH, SOCKS5
 
-## 🚀 راه‌اندازی سریع
+## 📦 ساختار پروژه
 
-### مرحله ۱: اضافه کردن API Token به GitHub Secrets
+```
+├── .github/workflows/deploy.yml    # GitHub Actions Workflow
+├── Source.js                       # کد اصلی ورکر
+├── wrangler.toml                   # تنظیمات Wrangler
+├── public/                         # فایل‌های GitHub Pages
+│   └── index.html                  # صفحه Wizard
+├── wizard/                         # فایل‌های پیشرفته Wizard
+│   ├── index.html
+│   └── wizard.js
+├── ips.txt                         # لیست IPهای ترجیحی
+└── proxy/                          # فایل‌های منطقه‌ای
+```
 
-1. به ریپازیتوری گیت‌هاب خود بروید
-2. به **Settings → Secrets and variables → Actions** بروید
+## 🔧 راه‌اندازی
+
+### مرحله ۱: تنظیم Secrets در GitHub
+
+1. به ریپازیتوری گیت‌هاب بروید
+2. **Settings → Secrets and variables → Actions** را باز کنید
 3. روی **New repository secret** کلیک کنید
 4. Secret زیر را اضافه کنید:
 
-   - **Name:** `CF_API_TOKEN`
-   - **Value:** API Token کلودفلر خود را وارد کنید
+| Name | Value |
+|------|-------|
+| `CF_API_TOKEN` | توکن API کلودفلر شما |
 
-### نحوه ساخت API Token در کلودفلر:
+### نحوه ساخت Cloudflare API Token:
 
-1. به آدرس [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) بروید
+1. به آدرس [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) بروید
 2. روی **Create Token** کلیک کنید
-3. قالب **Edit Cloudflare Workers** را انتخاب کنید (یا توکن سفارشی با دسترسی `workers.edit` بسازید)
-4. توکن ساخته شده را کپی کنید
-
-> ✅ **نیازی به وارد کردن Account ID نیست!** سیستم به‌طور خودکار Account ID را از روی توکن استخراج می‌کند.
-
----
+3. قالب **Edit Cloudflare Workers** را انتخاب کنید
+4. یا توکن سفارشی با دسترسی‌های زیر بسازید:
+   - `Account.Cloudflare Workers:Edit`
+   - `Account.Cloudflare KV Storage:Edit` (اختیاری)
+5. توکن را کپی و در GitHub Secrets ذخیره کنید
 
 ### مرحله ۲: فعال‌سازی GitHub Pages
 
 1. به **Settings → Pages** بروید
 2. در بخش **Build and deployment**:
-   - **Source:** GitHub Actions
-3. تغییرات را ذخیره کنید
-
----
+   - **Source** را روی **GitHub Actions** قرار دهید
+3. تنظیمات ذخیره می‌شود
 
 ### مرحله ۳: دپلوی خودکار
 
 با هر بار push به شاخه‌های `main` یا `master`:
-
-✅ کد ورکر به **Cloudflare Workers** دپلوی می‌شود  
-✅ فایل‌های استاتیک از پوشه `public/` به **GitHub Pages** دپلوی می‌شوند  
-✅ تنظیمات GitHub repo به‌طور خودکار در `wrangler.toml` اعمال می‌شود
-
----
+- ✅ کد ورکر به Cloudflare Workers دپلوی می‌شود
+- ✅ فایل‌های پوشه `public/` به GitHub Pages دپلوی می‌شوند
 
 ## 🌐 آدرس‌های دسترسی
 
-- **Cloudflare Workers:** `https://edge-relay.<your-subdomain>.workers.dev`
-- **GitHub Pages:** `https://<username>.github.io/<repository-name>/`
-- **Wizard (تنظیمات):** `https://<username>.github.io/<repository-name>/index.html`
+پس از دپلوی موفق:
 
----
+| سرویس | آدرس |
+|-------|------|
+| **Cloudflare Workers** | `https://edge-relay.<username>.workers.dev` |
+| **GitHub Pages** | `https://<username>.github.io/<repo-name>/` |
 
-## 📁 ساختار پروژه
+## 🎯 Wizard دپلوی
 
+صفحه `index.html` در GitHub Pages یک Wizard تعاملی ارائه می‌دهد که:
+- اعتبارسنجی خودکار API Token
+- نمایش وضعیت دپلوی به صورت زنده
+- لینک مستقیم به ورکر دپلوی شده
+
+## ⚙️ تنظیمات پیشرفته
+
+### متغیرهای محیطی در wrangler.toml:
+
+```toml
+[vars]
+u = "uuid-shoma"          # UUID برای احراز هویت
+d = ""                     # مسیر سفارشی
+p = ""                     # پورت سفارشی
+ev = "yes"                 # فعال‌سازی VLESS
+et = "yes"                 # فعال‌سازی Trojan
+ex = "no"                  # غیرفعال‌سازی xhttp
+ech = "no"                 # فعال‌سازی ECH
+gh = "https://github.com/USERNAME/REPO"  # آدرس ریپو
+yxURL = "https://USERNAME.github.io/REPO/ips.txt"  # آدرس ips.txt
 ```
-/workspace/
-├── .github/workflows/deploy.yml    # GitHub Actions workflow
-├── Source.js                       # کد اصلی ورکر
-├── wrangler.toml                   # تنظیمات Wrangler (auto-updated)
-├── public/
-│   └── index.html                  # صفحه Wizard برای دپلوی
-├── wizard/
-│   ├── index.html                  # صفحه تنظیمات پیشرفته
-│   └── wizard.js                   # اسکریپت Wizard
-├── ips.txt                         # لیست IPهای ترجیحی
-└── proxy/                          # فایل‌های پروکسی بر اساس کشور
-```
 
----
+### Subscription Endpoints:
 
-## 🔧 تنظیمات دستی (اختیاری)
+- **Base64**: `https://your-worker.workers.dev/sub?target=base64`
+- **Clash Meta**: `https://your-worker.workers.dev/sub?target=clash`
+- **Sing-Box**: `https://your-worker.workers.dev/sub?target=singbox`
 
-اگر می‌خواهید تنظیمات خاصی را اعمال کنید، می‌توانید از طریق KV Store یا Environment Variables در Cloudflare Dashboard اقدام کنید:
+## 🔒 امنیت
 
-### Environment Variables موجود:
-
-| Variable | توضیحات | پیش‌فرض |
-|----------|---------|---------|
-| `u` | UUID برای احراز هویت | auto-generated |
-| `d` | مسیر سفارشی | empty |
-| `ev` | فعال‌سازی VLESS | yes |
-| `et` | فعال‌سازی Trojan | yes |
-| `ex` | فعال‌سازی xhttp | no |
-| `ech` | فعال‌سازی ECH | no |
-| `gh` | آدرس GitHub repo | auto-set |
-| `yxURL` | آدرس ips.txt در GitHub Pages | auto-set |
-
----
+- ✅ هیچ Secretی در کد ذخیره نمی‌شود
+- ✅ API Token فقط در GitHub Secrets نگهداری می‌شود
+- ✅ دسترسی‌های توکن به حداقل لازم محدود است
+- ✅ عدم نیاز به Account ID
 
 ## 🛠 عیب‌یابی
 
 ### خطای 404 در GitHub Pages:
-- مطمئن شوید GitHub Pages در Settings → Pages فعال باشد
-- منبع را روی **GitHub Actions** قرار دهید
-- یک commit جدید push کنید تا workflow اجرا شود
+- مطمئن شوید Pages روی **GitHub Actions** تنظیم شده است
+- بررسی کنید workflow با موفقیت اجرا شده باشد
 
-### خطای Deployment در Workers:
-- بررسی کنید API Token معتبر باشد
-- دسترسی `workers.edit` به توکن داده شده باشد
+### خطای دپلوی Workers:
+- توکن API را بررسی کنید
+- دسترسی‌های توکن را تأیید کنید
 - لاگ‌های GitHub Actions را بررسی کنید
 
-### ورکر دپلوی می‌شود اما Wizard نمایش داده نمی‌شود:
-- آدرس Worker را مستقیماً در مرورگر باز کنید
-- مسیر `/sub` را برای دریافت subscription امتحان کنید
-- کش مرورگر را پاک کنید
-
----
-
-## 📝 نکات مهم
-
-1. **امنیت:** API Token شما فقط در GitHub Secrets ذخیره می‌شود و هرگز در کد قرار نمی‌گیرد
-2. **به‌روزرسانی خودکار:** با هر push جدید، دپلوی خودکار انجام می‌شود
-3. **هماهنگی Workers و Pages:** ابتدا Workers دپلوی می‌شود، سپس Pages
-4. **تنظیمات خودکار:** آدرس‌های GitHub repo به‌طور خودکار در wrangler.toml اعمال می‌شوند
-
----
-
-## 📄 لایسنس
+## 📝 لایسنس
 
 این پروژه تحت لایسنس MIT منتشر شده است.
 
 ---
 
-ساخته شده با ❤️ برای کلودفلر ورکرز
+**ساخته شده با ❤️ برای Cloudflare Workers**
