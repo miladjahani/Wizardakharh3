@@ -24,10 +24,16 @@ jobs:
         run: npm install -g wrangler
 
       - name: Deploy to Cloudflare Workers
-        run: wrangler deploy
+        run: |
+          # Auto-update wrangler.toml with GitHub repo info
+          GITHUB_OWNER="${{ github.repository_owner }}"
+          GITHUB_REPO=$(basename "${{ github.repository }}")
+          sed -i "s|https://github.com/USERNAME/REPO|https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}|g" wrangler.toml
+          sed -i "s|https://USERNAME.github.io/REPO|https://${GITHUB_OWNER}.github.io/${GITHUB_REPO}|g" wrangler.toml
+          
+          wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
 
   deploy-pages:
     name: Deploy to GitHub Pages

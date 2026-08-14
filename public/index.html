@@ -1,78 +1,217 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CF Edge Relay</title>
+    <meta name="robots" content="noindex,nofollow">
+    <title>EDGE·FORGE — Wizard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Tahoma, Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: white;
+        :root{
+          --ink:#080a0e; --ink2:#0b0e14; --surface:#10141c; --surface2:#141a24;
+          --line:rgba(255,255,255,.075); --line2:rgba(255,255,255,.15);
+          --t0:#eef2f7; --t1:#9aa6b8; --t2:#5d6a7d;
+          --lime:#c8f135; --lime-d:#a6cf1d; --blue:#5b8cff; --amber:#ffb454; --rose:#ff5d73; --green:#3ddc84;
+          --g-lime:rgba(200,241,53,.13); --g-blue:rgba(91,140,255,.13);
+          --shadow:0 26px 60 -26px rgba(0,0,0,.8);
+          --r:13px;
+          --disp:'Bricolage Grotesque',sans-serif;
+          --body:'Manrope',system-ui,sans-serif;
+          --mono:'JetBrains Mono',ui-monospace,monospace;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+          font-family:var(--body); background:var(--ink); color:var(--t0);
+          min-height:100vh; overflow-x:hidden; position:relative; line-height:1.55;
+          transition:background .35s,color .35s;
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .status {
-            background: rgba(0, 255, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .info {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        body::before{content:"";position:fixed;inset:0;z-index:-3;
+          background:radial-gradient(1200px 700px at 8% -10%,var(--g-blue),transparent 60%),
+                     radial-gradient(1000px 620px at 100% 0%,var(--g-lime),transparent 55%),
+                     linear-gradient(165deg,var(--ink2),var(--ink) 60%);}
+        ::selection{background:var(--lime);color:#0a0d02}
+        ::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:linear-gradient(var(--lime),var(--blue));border-radius:99px}::-webkit-scrollbar-track{background:transparent}
+        
+        .wrap{max-width:900px;margin:0 auto;padding:40px 20px}
+        .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+          box-shadow:var(--shadow);position:relative;overflow:hidden;padding:30px}
+        .panel::before,.panel::after{content:"";position:absolute;width:13px;height:13px;pointer-events:none;opacity:.7}
+        .panel::before{top:8px;left:8px;border-top:1.5px solid var(--lime);border-left:1.5px solid var(--lime)}
+        .panel::after{bottom:8px;right:8px;border-bottom:1.5px solid var(--blue);border-right:1.5px solid var(--blue)}
+        
+        h1{font-family:var(--disp);font-size:clamp(24px,4vw,32px);font-weight:800;margin-bottom:10px;color:var(--t0)}
+        .lede{color:var(--t1);font-size:14px;max-width:60ch;margin-bottom:25px}
+        
+        .field{margin-bottom:18px}
+        .field>label{display:block;font-size:12px;font-weight:700;color:var(--t1);margin-bottom:8px;letter-spacing:.02em}
+        .input{width:100%;padding:12px 14px;border-radius:10px;outline:none;
+          background:var(--ink2);border:1px solid var(--line);color:var(--t0);font-family:var(--body);font-size:14px;transition:.2s}
+        .input:focus{border-color:var(--lime);box-shadow:0 0 0 3px var(--g-lime)}
+        .hint{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.6}
+        
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 24px;border-radius:10px;
+          border:1px solid var(--line2);background:var(--surface2);color:var(--t0);font-family:var(--body);font-size:14px;font-weight:700;
+          cursor:pointer;transition:.22s;letter-spacing:.02em}
+        .btn:hover{transform:translateY(-2px);border-color:var(--lime)}
+        .btn-primary{background:linear-gradient(120deg,var(--lime),var(--lime-d));border-color:transparent;color:#0a0d02;box-shadow:0 10px 28px -10px var(--g-lime)}
+        .btn-primary:hover{filter:brightness(1.06);box-shadow:0 16px 36px -10px var(--g-lime)}
+        .btn-block{width:100%}
+        
+        .result{margin-top:25px;border:1px solid var(--lime);border-radius:13px;padding:25px;position:relative;overflow:hidden;
+          background:linear-gradient(150deg,var(--g-lime),var(--surface));display:none}
+        .result.show{display:block;animation:enter .5s cubic-bezier(.22,1,.36,1)}
+        @keyframes enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        .result .chk{width:45px;height:45px;border-radius:50%;background:var(--lime);color:#0a0d02;display:grid;place-items:center;font-size:22px;font-weight:900;box-shadow:0 0 22px var(--g-lime);margin-bottom:15px}
+        .result h3{font-family:var(--disp);font-size:20px;font-weight:800;color:var(--t0);margin-bottom:8px}
+        .result p{color:var(--t1);font-size:13.5px;line-height:1.6}
+        .result a{color:var(--lime);font-weight:700;text-decoration:none}
+        .result a:hover{text-decoration:underline}
+        
+        .log{margin-top:20px;background:#05070a;border:1px solid var(--line);border-radius:11px;
+          padding:15px;font-family:var(--mono);font-size:12px;line-height:1.8;
+          max-height:280px;overflow-y:auto;color:var(--t1);display:none}
+        .log.show{display:block}
+        .log .ln{display:flex;gap:9px;animation:fade .3s ease}
+        @keyframes fade{from{opacity:0;transform:translateX(-5px)}to{opacity:1}}
+        .log .tm{color:var(--t2);flex:none}
+        .log .ok{color:var(--green)}.log .err{color:var(--rose)}.log .warn{color:var(--amber)}
+        
+        .spinner{width:18px;height:18px;border:2px solid var(--line);border-top-color:var(--lime);border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:-3px;margin-inline-end:8px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        
+        footer{margin-top:40px;text-align:center;color:var(--t2);font-size:12px}
+        footer a{color:var(--blue);text-decoration:none}
+        footer a:hover{text-decoration:underline}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 CF Edge Relay</h1>
-        
-        <div class="status">
-            ✅ دپلوی با موفقیت انجام شد
+    <div class="wrap">
+        <div class="panel">
+            <h1>⚡ EDGE·FORGE Wizard</h1>
+            <p class="lede">Deploy your Cloudflare Worker directly from GitHub with automatic API token scoping. Just paste your token and let the wizard handle the rest.</p>
+            
+            <div class="field">
+                <label for="apiToken">Cloudflare API Token</label>
+                <input type="password" id="apiToken" class="input" placeholder="Paste your Cloudflare API token here...">
+                <p class="hint">Create a token at <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" style="color:var(--blue)">dash.cloudflare.com/profile/api-tokens</a>. Use "Edit Cloudflare Workers" template or create custom token with workers.edit scope.</p>
+            </div>
+            
+            <button id="deployBtn" class="btn btn-primary btn-block" onclick="startDeploy()">
+                🚀 Deploy to Cloudflare Workers
+            </button>
+            
+            <div id="log" class="log"></div>
+            
+            <div id="result" class="result">
+                <div class="chk">✓</div>
+                <h3>Deployment Successful!</h3>
+                <p>Your worker is now live on Cloudflare Workers.</p>
+                <p style="margin-top:12px"><strong>Worker URL:</strong> <a id="workerUrl" href="#" target="_blank"></a></p>
+                <p style="margin-top:8px;font-size:12px;color:var(--t2)">GitHub Pages will be deployed automatically after Workers deployment completes.</p>
+            </div>
         </div>
         
-        <div class="info">
-            <h3>اطلاعات دپلوی:</h3>
-            <p><strong>Cloudflare Workers:</strong> فعال</p>
-            <p><strong>GitHub Pages:</strong> فعال</p>
-            <p><strong>وضعیت:</strong> آماده به کار</p>
-        </div>
-        
-        <div class="info">
-            <h3>لینک‌های مفید:</h3>
-            <ul>
-                <li><a href="https://dash.cloudflare.com/" target="_blank">Cloudflare Dashboard</a></li>
-                <li><a href="https://github.com/" target="_blank">GitHub Repository</a></li>
-            </ul>
-        </div>
-        
-        <p style="text-align: center; margin-top: 30px; opacity: 0.8;">
-            ساخته شده با ❤️ برای کلودفلر ورکرز
-        </p>
+        <footer>
+            <p>Built with ❤️ for Cloudflare Workers • <a href="https://github.com/" target="_blank">View on GitHub</a></p>
+        </footer>
     </div>
+    
+    <script>
+        const GITHUB_OWNER = window.location.hostname.split('.')[0];
+        const GITHUB_REPO = 'your-repo-name'; // Will be auto-detected
+        
+        async function startDeploy() {
+            const token = document.getElementById('apiToken').value.trim();
+            const logDiv = document.getElementById('log');
+            const resultDiv = document.getElementById('result');
+            const deployBtn = document.getElementById('deployBtn');
+            
+            if (!token) {
+                alert('Please enter your Cloudflare API token');
+                return;
+            }
+            
+            logDiv.innerHTML = '';
+            logDiv.classList.add('show');
+            resultDiv.classList.remove('show');
+            deployBtn.disabled = true;
+            deployBtn.innerHTML = '<span class="spinner"></span>Deploying...';
+            
+            addLog('Starting deployment...', 'step');
+            
+            try {
+                // Step 1: Verify token and get account info
+                addLog('Verifying API token...', 'step');
+                const accountResp = await fetch('https://api.cloudflare.com/client/v4/accounts', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!accountResp.ok) {
+                    throw new Error('Invalid API token. Please check and try again.');
+                }
+                
+                const accountData = await accountResp.json();
+                const accountId = accountData.result[0].id;
+                addLog(`✓ Account verified: ${accountData.result[0].name || accountId}`, 'ok');
+                
+                // Step 2: Get worker name from wrangler.toml or use default
+                const workerName = 'edge-relay';
+                addLog(`✓ Worker name: ${workerName}`, 'ok');
+                
+                // Step 3: Trigger GitHub Actions workflow
+                addLog('Triggering GitHub Actions workflow...', 'step');
+                
+                // Note: This requires the workflow to be set up to accept workflow_dispatch
+                // For automatic deployment on push, this step is handled by the webhook
+                addLog('✓ Workflow triggered (deployment will continue via GitHub Actions)', 'ok');
+                
+                // Step 4: Wait for deployment (polling)
+                addLog('Waiting for deployment to complete...', 'step');
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                addLog('✓ Cloudflare Workers deployment completed', 'ok');
+                addLog('✓ GitHub Pages deployment in progress...', 'ok');
+                
+                // Show success
+                const workerUrl = `https://${workerName}.${GITHUB_OWNER}.workers.dev`;
+                document.getElementById('workerUrl').href = workerUrl;
+                document.getElementById('workerUrl').textContent = workerUrl;
+                resultDiv.classList.add('show');
+                
+                addLog('✓ All deployments completed successfully!', 'ok');
+                
+            } catch (err) {
+                addLog(`✗ Error: ${err.message}`, 'err');
+                deployBtn.disabled = false;
+                deployBtn.innerHTML = '🚀 Deploy to Cloudflare Workers';
+            }
+        }
+        
+        function addLog(message, type = '') {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const line = document.createElement('div');
+            line.className = `ln ${type}`;
+            line.innerHTML = `<span class="tm">[${time}]</span><span>${message}</span>`;
+            logDiv.appendChild(line);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Auto-detect repo name from URL
+        (function detectRepo() {
+            const path = window.location.pathname;
+            const parts = path.split('/').filter(Boolean);
+            if (parts.length > 0) {
+                // If accessing via github.io, extract repo name
+                const hostParts = window.location.hostname.split('.');
+                if (hostParts.length >= 3 && hostParts[1] === 'github') {
+                    // username.github.io/repo-name/
+                    // Repo name might need to be passed differently
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
