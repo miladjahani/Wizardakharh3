@@ -1,0 +1,17 @@
+name = "edge-relay"
+main = "Source.js"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+u = "351c9981-04b6-4103-aa4b-864aa9c91469"
+d = ""
+p = ""
+ev = "yes"
+et = "yes"
+ex = "no"
+ech = "no"
+ena = "no"
+epd = "yes"
+epi = "yes"
+egi = "yes"
