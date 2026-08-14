@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex,nofollow">
-    <title>EDGE·FORGE — Wizard</title>
+    <title>EDGE·FORGE — Deploy Wizard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -120,7 +120,7 @@
     
     <script>
         const GITHUB_OWNER = window.location.hostname.split('.')[0];
-        const GITHUB_REPO = 'your-repo-name'; // Will be auto-detected
+        const GITHUB_REPO = window.location.pathname.split('/')[1] || 'edge-relay';
         
         async function startDeploy() {
             const token = document.getElementById('apiToken').value.trim();
@@ -198,20 +198,6 @@
             logDiv.appendChild(line);
             logDiv.scrollTop = logDiv.scrollHeight;
         }
-        
-        // Auto-detect repo name from URL
-        (function detectRepo() {
-            const path = window.location.pathname;
-            const parts = path.split('/').filter(Boolean);
-            if (parts.length > 0) {
-                // If accessing via github.io, extract repo name
-                const hostParts = window.location.hostname.split('.');
-                if (hostParts.length >= 3 && hostParts[1] === 'github') {
-                    // username.github.io/repo-name/
-                    // Repo name might need to be passed differently
-                }
-            }
-        })();
     </script>
 </body>
 </html>
